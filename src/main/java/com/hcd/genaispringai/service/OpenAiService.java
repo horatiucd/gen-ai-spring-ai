@@ -4,6 +4,7 @@ import com.hcd.genaispringai.response.JobDescription;
 import com.hcd.genaispringai.response.JobReasons;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatClient;
 import org.springframework.ai.parser.BeanOutputParser;
@@ -61,7 +62,9 @@ public class OpenAiService {
         promptTemplate.add("job", domain);
         promptTemplate.add("location", location);
 
-        ChatResponse response = client.call(promptTemplate.create());
+        final Prompt prompt = promptTemplate.create();
+
+        ChatResponse response = client.call(prompt);
         return response.getResult().getOutput().getContent();
     }
 
@@ -82,7 +85,9 @@ public class OpenAiService {
         promptTemplate.add("format", outputParser.getFormat());
         promptTemplate.setOutputParser(outputParser);
 
-        ChatResponse response = client.call(promptTemplate.create());
+        final Prompt prompt = promptTemplate.create();
+
+        ChatResponse response = client.call(prompt);
         return outputParser.parse(response.getResult().getOutput().getContent());
     }
 }
