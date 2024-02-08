@@ -82,6 +82,7 @@ public class OpenAiService {
         promptTemplate.add("count", count);
         promptTemplate.add("job", job);
         promptTemplate.add("location", location);
+
         promptTemplate.add("format", outputParser.getFormat());
         promptTemplate.setOutputParser(outputParser);
 
