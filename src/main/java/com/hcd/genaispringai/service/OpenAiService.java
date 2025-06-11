@@ -35,11 +35,10 @@ public class OpenAiService {
                 Write a one paragraph job description for a {job} based in {location}.
                 """;
 
-        final PromptTemplate promptTemplate = new PromptTemplate(promptText);
-        promptTemplate.add("job", job);
-        promptTemplate.add("location", location);
-
-        return client.prompt(promptTemplate.create())
+        return client.prompt()
+                .user(userSpec -> userSpec.text(promptText)
+                        .param("job", job)
+                        .param("location", location))
                 .call()
                 .entity(JobDescription.class);
     }
@@ -68,12 +67,11 @@ public class OpenAiService {
                 For instance, "{job} jobs are rewarding."
                 """;
 
-        final PromptTemplate promptTemplate = new PromptTemplate(promptText);
-        promptTemplate.add("count", count);
-        promptTemplate.add("job", job);
-        promptTemplate.add("location", location);
-
-        return client.prompt(promptTemplate.create())
+        return client.prompt()
+                .user(userSpec -> userSpec.text(promptText)
+                        .param("count", count)
+                        .param("job", job)
+                        .param("location", location))
                 .call()
                 .entity(JobReasons.class);
     }
