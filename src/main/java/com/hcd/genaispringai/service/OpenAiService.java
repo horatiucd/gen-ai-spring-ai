@@ -3,6 +3,7 @@ package com.hcd.genaispringai.service;
 import com.hcd.genaispringai.response.JobDescription;
 import com.hcd.genaispringai.response.JobReasons;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,7 @@ public class OpenAiService {
         promptTemplate.add("location", location);
 
         return client.prompt(promptTemplate.create())
+                .advisors(new SimpleLoggerAdvisor())
                 .call()
                 .content();
     }
@@ -68,6 +70,8 @@ public class OpenAiService {
                 """;
 
         return client.prompt()
+                .advisors(new SimpleLoggerAdvisor(request -> "Custom request: " + request.toString(),
+                        response -> "Custom response: " + response.getResult(), 0))
                 .user(userSpec -> userSpec.text(promptText)
                         .param("count", count)
                         .param("job", job)
